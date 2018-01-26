@@ -99,6 +99,7 @@ var TT = TAOTAO = {
     		if(data && data.cid){
     			_ele.after("<span style='margin-left:10px;'>"+data.cid+"</span>");
     		}else{
+    			//再元素后面追加标签<span style='margin-left:10px;'>
     			_ele.after("<span style='margin-left:10px;'></span>");
     		}
     		_ele.unbind('click').click(function(){

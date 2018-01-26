@@ -19,6 +19,7 @@
     <!-- 声明需要暴露的服务接口  发布服务 -->
     <dubbo:service interface="com.taotao.service.TestService" ref="testServiceImpl" timeout="1000000" />
     <dubbo:service interface="com.taotao.service.ItemService" ref="itemServiceImpl" timeout="1000000"/>
+    <dubbo:service interface="com.taotao.service.ItemCatService" ref="itemCatServiceImpl" timeout="1000000"/>
 
    <!-- <dubbo:service interface="com.alibaba.dubbo.demo.DemoService" ref="demoServiceLocal" />
     <dubbo:reference id="demoServiceRemote" interface="com.alibaba.dubbo.demo.DemoService" />-->

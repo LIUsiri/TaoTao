@@ -16,12 +16,20 @@
         <property name="prefix" value="/WEB-INF/jsp/"/>
         <property name="suffix" value=".jsp"/>
     </bean>
+    <!--配置多媒体文件上传解析器-->
+    <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+        <property name="maxUploadSize" value="95242880"></property>
+        <property name="defaultEncoding" value="utf-8"></property>
+    </bean>
+    <!--引入外部文件-->
+    <context:property-placeholder location="classpath:resource/*.properties"/>
     <!-- 引用dubbo服务 -->
     <!--名字要唯一-->
     <dubbo:application name="taotao_manager_web"/>
     <dubbo:registry protocol="zookeeper" address="120.77.211.233:2181"/>
-    <dubbo:reference interface="com.taotao.service.TestService" id="testService" timeout="1000000" />
-    <dubbo:reference interface="com.taotao.service.ItemService" id="itemService" timeout="1000000" />
+    <dubbo:reference interface="com.taotao.service.TestService" id="testService" timeout="100000" />
+    <dubbo:reference interface="com.taotao.service.ItemService" id="itemService" timeout="100000" />
+    <dubbo:reference interface="com.taotao.service.ItemCatService" id="itemCatService" timeout="100000" />
 
     <mvc:default-servlet-handler/>
 </beans>
