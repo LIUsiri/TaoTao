@@ -28,8 +28,14 @@
     <dubbo:application name="taotao_manager_web"/>
     <dubbo:registry protocol="zookeeper" address="120.77.211.233:2181"/>
     <dubbo:reference interface="com.taotao.service.TestService" id="testService" timeout="100000" />
+
     <dubbo:reference interface="com.taotao.service.ItemService" id="itemService" timeout="100000" />
     <dubbo:reference interface="com.taotao.service.ItemCatService" id="itemCatService" timeout="100000" />
 
+    <!--内容-->
+    <dubbo:reference interface="com.taotao.content.service.ContentCategoryService" id="contentCategoryService" timeout="100000"/>
+    <dubbo:reference interface="com.taotao.content.service.ContentService" id="contentServiceImpl" timeout="100000"/>
+    <!--搜索服务-->
+    <dubbo:reference interface="com.taotao.search.service.SearchItemService" id="searchItemService" timeout="1000000"></dubbo:reference>
     <mvc:default-servlet-handler/>
 </beans>

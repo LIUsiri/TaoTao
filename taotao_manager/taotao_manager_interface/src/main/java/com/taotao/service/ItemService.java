@@ -15,4 +15,24 @@ public interface ItemService{
      * @return 通用返回值
      */
     public TaotaoResult saveItemAndItemDesc(TbItem tbItem, String desc);
+
+    /**
+     * 给手机端调用信息
+     * 根据用户的id返回用户的信息
+     * @param id
+     * @return Json
+     */
+    public TbItem getTbItemById(Long id);
+
+    /**
+     * 给手机用户更新商品的基本信息
+     * @param item
+     */
+    void updateTbItem(TbItem item);
+
+    /**
+     * 给手机端调用删除商品的方法
+     * @param id
+     */
+    void deleteById(Long id);
 }

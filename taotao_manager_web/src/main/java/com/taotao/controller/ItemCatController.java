@@ -36,11 +36,6 @@ public class ItemCatController {
 
     //   /item/save
 
-    @RequestMapping("/item/save")
-    @ResponseBody
-    private TaotaoResult saveItem(TbItem tbItem, String desc){
 
-        return itemCatService.saveItemAndItemDesc(tbItem,desc);
-    }
 
 }

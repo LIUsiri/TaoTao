@@ -1,6 +1,8 @@
 package com.taotao.controller;
 
 import com.taotao.common.pojo.EasyUIDataGridResult;
+import com.taotao.common.pojo.TaotaoResult;
+import com.taotao.pojo.TbItem;
 import com.taotao.service.ItemService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -34,5 +36,12 @@ public class ItemController {
         //调用服务
 
         return list;
+    }
+
+    @RequestMapping("/item/save")
+    @ResponseBody
+    private TaotaoResult saveItem(TbItem tbItem, String desc){
+
+        return itemService.saveItemAndItemDesc(tbItem,desc);
     }
 }
