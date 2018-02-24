@@ -3,6 +3,7 @@ package com.taotao.service.impl;
 import com.taotao.common.pojo.EasyUITreeNode;
 import com.taotao.common.pojo.TaotaoResult;
 import com.taotao.common.utils.IDUtils;
+import com.taotao.common.utils.JsonUtils;
 import com.taotao.mapper.TbItemCatMapper;
 import com.taotao.mapper.TbItemDescMapper;
 import com.taotao.mapper.TbItemMapper;
@@ -11,6 +12,8 @@ import com.taotao.pojo.TbItemCat;
 import com.taotao.pojo.TbItemCatExample;
 import com.taotao.pojo.TbItemDesc;
 import com.taotao.service.ItemCatService;
+import com.taotao.service.manager.jedis.JedisClient;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -34,6 +37,9 @@ public class ItemCatServiceImpl implements ItemCatService {
     @Autowired
     private TbItemMapper tbItemMapper;
 
+    @Autowired
+    private TbItemDescMapper tbItemDescMapper;
+
 
     @Override
     public List<EasyUITreeNode> getItemCatList(Long parentId) {
@@ -54,6 +60,34 @@ public class ItemCatServiceImpl implements ItemCatService {
             nodes.add(node);
         }
         return nodes;
+    }
+
+    @Autowired
+    private JedisClient jedisClient;
+
+    @Override
+    public TbItemDesc getItemDesc(Long itemId) {
+
+        try {
+            if(StringUtils.isNotBlank(jedisClient.get("ITEM_INFO:"+itemId+":DESC"))){
+                jedisClient.expire("ITEM_INFO:"+itemId+":DESC",3600*8);
+                return JsonUtils.jsonToPojo(jedisClient.get("ITEM_INFO:"+itemId+":DESC"),TbItemDesc.class);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        TbItemDesc tbItemDesc = tbItemDescMapper.selectByPrimaryKey(itemId);
+
+        try {
+            jedisClient.set("ITEM_INFO:"+itemId+":DESC", JsonUtils.objectToJson(tbItemDesc));
+            //设置有效期
+            jedisClient.expire("ITEM_INFO:"+itemId+":DESC",3600*8);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return tbItemDesc;
     }
 
 

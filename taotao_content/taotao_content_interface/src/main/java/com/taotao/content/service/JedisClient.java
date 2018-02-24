@@ -1,6 +1,7 @@
 package com.taotao.content.service;
 
 public interface JedisClient {
+
     String set(String key, String value);
     String get(String key);
     Boolean exists(String key);

@@ -5,11 +5,14 @@ import com.github.pagehelper.PageInfo;
 import com.taotao.common.pojo.EasyUIDataGridResult;
 import com.taotao.common.pojo.TaotaoResult;
 import com.taotao.common.utils.IDUtils;
+import com.taotao.common.utils.JsonUtils;
 import com.taotao.mapper.TbItemDescMapper;
 import com.taotao.mapper.TbItemMapper;
 import com.taotao.pojo.TbItem;
 import com.taotao.pojo.TbItemDesc;
 import com.taotao.service.ItemService;
+import com.taotao.service.manager.jedis.JedisClient;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.jms.core.MessageCreator;
@@ -108,10 +111,33 @@ public class ItemServiceImpl implements ItemService {
         return TaotaoResult.ok();
     }
 
+    @Autowired
+    private JedisClient jedisClient;
+
     @Override
     public TbItem getTbItemById(Long id) {
 
+        try {
+            if(StringUtils.isNotBlank(jedisClient.get("ITEM_INFO:"+id+":BASE"))){
+
+                jedisClient.expire("ITEM_INFO:"+id+":BASE",3600*8);
+                return JsonUtils.jsonToPojo(jedisClient.get("ITEM_INFO:"+id+":BASE"),TbItem.class);
+            }
+        } catch (Exception e) {
+
+            e.printStackTrace();
+        }
         TbItem item = tbItemMapper.selectByPrimaryKey(id);
+        //添加缓存到redis中去
+
+        try {
+            jedisClient.set("ITEM_INFO:"+id+":BASE", JsonUtils.objectToJson(item));
+            //设置有效期
+            jedisClient.expire("ITEM_INFO:"+id+":BASE",3600*8);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
 
         return item;
     }

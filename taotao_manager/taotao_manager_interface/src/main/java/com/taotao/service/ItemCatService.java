@@ -3,6 +3,7 @@ package com.taotao.service;
 import com.taotao.common.pojo.EasyUITreeNode;
 import com.taotao.common.pojo.TaotaoResult;
 import com.taotao.pojo.TbItem;
+import com.taotao.pojo.TbItemDesc;
 
 import java.util.List;
 
@@ -15,5 +16,11 @@ public interface ItemCatService {
     public List<EasyUITreeNode> getItemCatList(Long parentId);
 
 
+    /**
+     * 根据商品Id查询商品描述
+     * @param itemId
+     * @return TbItemDesc
+     */
+   public TbItemDesc getItemDesc(Long itemId);
 
 }
